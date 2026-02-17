@@ -23,6 +23,8 @@ export default function ScanQR() {
           student_id: user?.id,
         }),
       });
+      await navigator.mediaDevices.getUserMedia({ video: true });
+
 
       alert("Attendance Marked!");
     } catch (err) {
