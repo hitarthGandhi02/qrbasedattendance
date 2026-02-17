@@ -107,15 +107,7 @@ export default function StudentDashboard() {
         <div className={styles.card}>
           <h2 className={styles.cardTitle}>📅 Today's Schedule</h2>
           <ul className={styles.scheduleList}>
-            <li className={styles.scheduleItem}>
-              9:00 AM - Database Management (Room 302)
-            </li>
-            <li className={styles.scheduleItem}>
-              10:00 AM - Operating Systems (Room 304)
-            </li>
-            <li className={styles.scheduleItem}>
-              11:30 AM - Artificial Intelligence (Room 310)
-            </li>
+
           </ul>
         </div>
 

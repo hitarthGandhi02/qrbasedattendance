@@ -1,19 +1,15 @@
 "use client";
 
-import { Html5QrcodeScanner } from "html5-qrcode";
-import { useEffect } from "react";
+import { Scanner } from "@yudiel/react-qr-scanner";
 import { supabase } from "@/lib/supabaseClient";
 
 export default function ScanQR() {
-  useEffect(() => {
-    const scanner = new Html5QrcodeScanner(
-      "reader",
-      { fps: 10, qrbox: 250 },
-      false
-    );
 
-    scanner.render(async (decodedText) => {
-      const parsed = JSON.parse(decodedText);
+  const handleScan = async (result) => {
+    if (!result) return;
+
+    try {
+      const parsed = JSON.parse(result[0].rawValue);
 
       const {
         data: { user },
@@ -21,21 +17,30 @@ export default function ScanQR() {
 
       await fetch("/api/mark-attendance", {
         method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           session_code: parsed.session_code,
-          student_id: user.id,
+          student_id: user?.id,
         }),
       });
 
       alert("Attendance Marked!");
-      scanner.clear();
-    });
-  }, []);
+    } catch (err) {
+      console.error(err);
+      alert("Invalid QR Code");
+    }
+  };
 
   return (
     <div>
       <h2>Scan QR Code</h2>
-      <div id="reader" />
+
+      <Scanner
+        onScan={handleScan}
+        onError={(err) => console.log(err)}
+        constraints={{ facingMode: "environment" }}
+        styles={{ container: { width: "100%" } }}
+      />
     </div>
   );
 }
