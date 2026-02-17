@@ -5,11 +5,6 @@
   color: #e2e8f0;
 }
 
-.loading {
-  padding: 40px;
-  color: white;
-}
-
 .header {
   background-color: #0f172a;
   text-align: center;
@@ -17,9 +12,13 @@
   border-bottom: 1px solid #2d3748;
 }
 
-.header h1 {
+.pageTitle {
   color: #38b2ac;
   margin: 0;
+}
+
+.welcomeText {
+  margin-top: 5px;
 }
 
 .container {
@@ -38,6 +37,11 @@
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
 }
 
+.cardTitle {
+  color: #38b2ac;
+  margin-bottom: 15px;
+}
+
 .progressCircle {
   width: 150px;
   height: 150px;
@@ -46,6 +50,9 @@
   align-items: center;
   justify-content: center;
   margin: 20px auto;
+}
+
+.progressText {
   font-size: 32px;
   font-weight: bold;
 }
@@ -57,12 +64,7 @@
   display: inline-block;
   margin-top: 10px;
   font-size: 14px;
-}
-
-.qrIcon {
-  font-size: 48px;
-  color: #38b2ac;
-  margin-bottom: 15px;
+  color: white;
 }
 
 .btn {
@@ -73,15 +75,17 @@
   border-radius: 8px;
   cursor: pointer;
   font-weight: bold;
+  font-size: 15px;
 }
 
 .btn:hover {
   background-color: #2c9a93;
 }
 
-.successMsg {
-  color: #48bb78;
-  margin-top: 8px;
+.qrIcon {
+  font-size: 48px;
+  color: #38b2ac;
+  margin-bottom: 10px;
 }
 
 .scheduleList {
@@ -89,14 +93,12 @@
   padding-left: 0;
 }
 
-.scheduleList li {
+.scheduleItem {
   margin: 8px 0;
 }
 
-.scheduleList li::before {
-  content: "•";
-  color: #38b2ac;
-  margin-right: 8px;
+.recentCard {
+  grid-column: span 2;
 }
 
 .table {
@@ -105,28 +107,28 @@
   margin-top: 10px;
 }
 
-.table th,
-.table td {
+.tableRow {}
+
+.tableHeader {
+  border: 1px solid #2d3748;
+  padding: 10px;
+  text-align: center;
+  background-color: #1e293b;
+  color: #38b2ac;
+}
+
+.tableCell {
   border: 1px solid #2d3748;
   padding: 10px;
   text-align: center;
 }
 
-.table th {
-  background-color: #1e293b;
-  color: #38b2ac;
-}
-
-.table tr:nth-child(even) {
-  background-color: #2d3748;
-}
-
 .badge {
   padding: 4px 10px;
   border-radius: 12px;
-  color: white;
   font-size: 13px;
   font-weight: bold;
+  color: white;
 }
 
 .present {
@@ -138,15 +140,16 @@
 }
 
 .logoutBtn {
-  padding: 12px 25px;
-  background-color: red;
-  color: white;
+  margin-top: 20px;
+  padding: 10px 16px;
   border: none;
   border-radius: 8px;
+  background-color: #e53e3e;
+  color: white;
   cursor: pointer;
-  margin-top: 20px;
 }
 
-.fullWidth {
-  grid-column: span 2;
+.loading {
+  text-align: center;
+  padding: 40px;
 }

@@ -17,7 +17,9 @@ export default function FacultyDashboard() {
   const [qrImage, setQrImage] = useState("");
   const [loading, setLoading] = useState(true);
   const [userId, setUserId] = useState(null);
-
+  const [logs, setLogs] = useState([]);
+  const [defaulters, setDefaulters] = useState([]);
+  const [facultyStatus, setFacultyStatus] = useState("");
 
   useEffect(() => {
     const checkUser = async () => {
@@ -32,7 +34,7 @@ export default function FacultyDashboard() {
 
       setUserId(user.id);
 
-      const { data: profile, error: profileError } = await supabase
+      const { data: profile } = await supabase
         .from("profiles")
         .select("full_name, role")
         .eq("id", user.id)
@@ -45,14 +47,12 @@ export default function FacultyDashboard() {
 
       setFacultyName(profile.full_name);
 
-      const { data: classData, error: classError } = await supabase
+      const { data: classData } = await supabase
         .from("classes")
         .select("class_id, class_name")
         .eq("faculty_id", user.id);
 
-      if (classError) console.error("Error fetching classes:", classError.message);
-      else setClasses(classData || []);
-
+      setClasses(classData || []);
       setLoading(false);
     };
 
@@ -63,22 +63,21 @@ export default function FacultyDashboard() {
     const fetchSubjects = async () => {
       if (!selectedClass || !userId) return;
 
-      const { data: subjectData, error: subjectError } = await supabase
+      const { data } = await supabase
         .from("faculty_subjects")
         .select("id, subject_id (subject_id, subject_name)")
         .eq("faculty_id", userId)
         .eq("class_id", selectedClass);
 
-      if (subjectError) {
-        console.error("Error fetching subjects:", subjectError.message);
-      } else {
-        setSubjects(subjectData.map((s) => ({
+      setSubjects(
+        data?.map((s) => ({
           id: s.id,
           name: s.subject_id.subject_name,
           subject_id: s.subject_id.subject_id,
-        })));
-        setSelectedSubject("");
-      }
+        })) || []
+      );
+
+      setSelectedSubject("");
     };
 
     fetchSubjects();
@@ -113,7 +112,21 @@ export default function FacultyDashboard() {
 
     const qrUrl = await QRCode.toDataURL(qrData);
     setQrImage(qrUrl);
+
+    addLog("New QR session created.");
   };
+
+  const addLog = (message) => {
+    const time = new Date().toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+    const date = new Date().toLocaleDateString();
+    setLogs((prev) => [{ message, time, date }, ...prev]);
+  };
+
+
+
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -125,15 +138,56 @@ export default function FacultyDashboard() {
   return (
     <div className={styles.wrapper}>
       <header className={styles.header}>
-        <h1>Faculty Dashboard</h1>
-        <p>Welcome, {facultyName}</p>
+        <h1 className={styles.pageTitle}>Faculty Dashboard</h1>
+        <p className={styles.welcomeText}>Welcome, {facultyName}</p>
       </header>
 
       <div className={styles.container}>
         <div className={styles.card}>
-          <h2>Create QR Session</h2>
+          <h2 className={styles.cardTitle}>
+            📉 Auto-Defaulter List Generator
+          </h2>
 
-          <label>Select Class:</label>
+          <button className={styles.btn}>
+            Generate List
+          </button>
+
+          {defaulters.length > 0 && (
+            <table className={styles.table}>
+              <thead>
+                <tr className={styles.tableRow}>
+                  <th className={styles.tableHeader}>Name</th>
+                  <th className={styles.tableHeader}>Roll</th>
+                  <th className={styles.tableHeader}>Attendance</th>
+                  <th className={styles.tableHeader}>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {defaulters.map((d, i) => (
+                  <tr key={i} className={styles.tableRow}>
+                    <td className={styles.tableCell}>{d.name}</td>
+                    <td className={styles.tableCell}>{d.roll}</td>
+                    <td className={styles.tableCell}>{d.att}</td>
+                    <td className={styles.tableCell}>
+                      <span
+                        className={`${styles.chip} ${styles.chipDefaulter}`}
+                      >
+                        Defaulter
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
+
+      
+        <div className={styles.card}>
+          <h2 className={styles.cardTitle}>
+            📲 Create New Lecture Session
+          </h2>
+
           <select
             className={styles.input}
             value={selectedClass}
@@ -147,7 +201,6 @@ export default function FacultyDashboard() {
             ))}
           </select>
 
-          <label>Select Subject:</label>
           <select
             className={styles.input}
             value={selectedSubject}
@@ -162,17 +215,43 @@ export default function FacultyDashboard() {
           </select>
 
           <button className={styles.btn} onClick={generateQR}>
-            Generate QR
+            Generate QR Code
           </button>
 
           {qrImage && (
             <div className={styles.qrContainer}>
-              <img src={qrImage} alt="QR Code" width="250" />
-              <p>Valid for 10 minutes</p>
+              <img
+                src={qrImage}
+                alt="QR Code"
+                className={styles.qrImage}
+              />
+              <p className={styles.successMsg}>
+                QR generated successfully
+              </p>
             </div>
           )}
         </div>
+        <div className={`${styles.card} ${styles.fullWidth}`}>
+          <h2 className={styles.cardTitle}>📜 Audit Logs</h2>
+          <div className={styles.logContainer}>
+            
+          </div>
+        </div>
+        <div className={`${styles.card} ${styles.fullWidth}`}>
+          <h2 className={styles.cardTitle}>
+            👩‍🏫 Faculty Attendance
+          </h2>
 
+          <button className={styles.btn}>
+            Scan QR to Mark Attendance
+          </button>
+
+          {facultyStatus && (
+            <p className={styles.successMsg}>
+              {facultyStatus}
+            </p>
+          )}
+        </div>
         <button className={styles.logoutBtn} onClick={handleLogout}>
           Logout
         </button>

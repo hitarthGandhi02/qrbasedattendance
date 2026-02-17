@@ -67,35 +67,90 @@ export default function StudentDashboard() {
   return (
     <div className={styles.wrapper}>
       <header className={styles.header}>
-        <h1>Student Dashboard</h1>
-        <p>Welcome, {studentName}</p>
+        <h1 className={styles.pageTitle}>Student Dashboard</h1>
+        <p className={styles.welcomeText}>Welcome, {studentName}</p>
       </header>
 
       <div className={styles.container}>
         <div className={styles.card}>
-          <h2>Attendance Summary</h2>
+          <h2 className={styles.cardTitle}>📊 Attendance Summary</h2>
 
           <div
             className={styles.progressCircle}
             style={{
-              background: `conic-gradient(#38b2ac 0% ${attendancePercent}%, #4a5568 ${attendancePercent}% 100%)`,
+              background: `conic-gradient(#f6ad55 0% ${attendancePercent}%, #4a5568 ${attendancePercent}% 100%)`,
             }}
           >
-            <span>{attendancePercent}%</span>
+            <span className={styles.progressText}>
+              {attendancePercent}%
+            </span>
           </div>
 
           {attendancePercent < 75 && (
-            <p className={styles.warning}>
-              ⚠ Below 75% Attendance Requirement
-            </p>
+            <div className={styles.warningBanner}>
+              ⚠️ Warning: Below 75% Attendance Requirement
+            </div>
           )}
+        </div>
 
+        <div className={styles.card}>
+          <h2 className={styles.cardTitle}>🎯 Mark Attendance</h2>
+          <div className={styles.qrIcon}>🔳</div>
           <button
             className={styles.btn}
             onClick={() => router.push("/dashboard/student/scan")}
           >
-            Scan QR to Mark Attendance
+            Scan QR Code
           </button>
+        </div>
+
+        <div className={styles.card}>
+          <h2 className={styles.cardTitle}>📅 Today's Schedule</h2>
+          <ul className={styles.scheduleList}>
+            <li className={styles.scheduleItem}>
+              9:00 AM - Database Management (Room 302)
+            </li>
+            <li className={styles.scheduleItem}>
+              10:00 AM - Operating Systems (Room 304)
+            </li>
+            <li className={styles.scheduleItem}>
+              11:30 AM - Artificial Intelligence (Room 310)
+            </li>
+          </ul>
+        </div>
+
+        <div className={`${styles.card} ${styles.recentCard}`}>
+          <h2 className={styles.cardTitle}>🧾 Recent Attendance</h2>
+
+          <table className={styles.table}>
+            <thead>
+              <tr className={styles.tableRow}>
+                <th className={styles.tableHeader}>Date</th>
+                <th className={styles.tableHeader}>Subject</th>
+                <th className={styles.tableHeader}>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr className={styles.tableRow}>
+                <td className={styles.tableCell}>10 Oct</td>
+                <td className={styles.tableCell}>DBMS</td>
+                <td className={styles.tableCell}>
+                  <span className={`${styles.badge} ${styles.present}`}>
+                    Present
+                  </span>
+                </td>
+              </tr>
+              <tr className={styles.tableRow}>
+                <td className={styles.tableCell}>11 Oct</td>
+                <td className={styles.tableCell}>AI</td>
+                <td className={styles.tableCell}>
+                  <span className={`${styles.badge} ${styles.absent}`}>
+                    Absent
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
 
         <button className={styles.logoutBtn} onClick={handleLogout}>
