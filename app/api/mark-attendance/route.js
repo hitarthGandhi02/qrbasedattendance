@@ -4,7 +4,6 @@ import { NextResponse } from "next/server";
 
 export async function POST(req) {
   try {
-    // ✅ In Next 15 this MUST be awaited
     const cookieStore = await cookies();
 
     const supabase = createServerClient(

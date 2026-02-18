@@ -1,14 +1,15 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { Scanner } from "@yudiel/react-qr-scanner";
 import { supabase } from "@/lib/supabaseClient";
 
 export default function ScanQR() {
+  const router = useRouter();
   const [scanning, setScanning] = useState(true);
   const [user, setUser] = useState(null);
 
-  // ✅ Fetch user after component mounts
   useEffect(() => {
     const getUser = async () => {
       const {
@@ -59,6 +60,7 @@ export default function ScanQR() {
       alert(err.message || "Invalid QR Code");
       setScanning(true);
     }
+    router.push("/dashboard/student");
   };
 
   return (

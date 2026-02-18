@@ -70,6 +70,7 @@ const handleLogin = async (e) => {
       <p className="register-link">
         New student? <a href="/signup/student">Register here</a>
       </p>
+      
     </div>
   )
 }

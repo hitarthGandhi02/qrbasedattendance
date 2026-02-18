@@ -106,7 +106,6 @@ export default function FacultyDashboard() {
       return;
     }
   
-    // ✅ Redirect to live session page
     router.push(`/dashboard/faculty/session/${result.session.session_id}`);
 
   };
