@@ -88,7 +88,7 @@ export default function FacultyDashboard() {
       alert("Please select class and subject");
       return;
     }
-
+  
     const res = await fetch("/api/create-session", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -98,23 +98,19 @@ export default function FacultyDashboard() {
         subject_id: selectedSubject,
       }),
     });
-
+  
     const result = await res.json();
-
+  
     if (result.error) {
       alert(result.error);
       return;
     }
+  
+    // ✅ Redirect to live session page
+    router.push(`/dashboard/faculty/session/${result.session.session_id}`);
 
-    const qrData = JSON.stringify({
-      session_code: result.session.session_code,
-    });
-
-    const qrUrl = await QRCode.toDataURL(qrData);
-    setQrImage(qrUrl);
-
-    addLog("New QR session created.");
   };
+  
 
   const addLog = (message) => {
     const time = new Date().toLocaleTimeString([], {
