@@ -250,7 +250,6 @@ setRecentAttendance(recent);
         {/* 🎯 Mark Attendance */}
         <div className={styles.card}>
           <h2 className={styles.cardTitle}>🎯 Mark Attendance</h2>
-          <div className={styles.qrIcon}>🔳</div>
           <button
             className={styles.btn}
             onClick={() =>
