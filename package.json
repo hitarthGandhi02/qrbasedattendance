@@ -13,6 +13,7 @@
     "@supabase/ssr": "^0.8.0",
     "@supabase/supabase-js": "^2.95.3",
     "@yudiel/react-qr-scanner": "^2.5.1",
+    "autotable": "^1.0.0",
     "html5-qrcode": "^2.3.8",
     "jspdf": "^4.2.0",
     "jspdf-autotable": "^5.0.7",

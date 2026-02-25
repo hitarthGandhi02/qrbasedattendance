@@ -93,7 +93,7 @@ export default function FacultyDashboard() {
   // FETCH ONGOING SESSIONS
   // -----------------------------
 
-  const generateDefaulters = async () => {
+const generateDefaulters = async () => {
   if (!defaulterClass) {
     alert("Please select a class first");
     return;
@@ -114,6 +114,7 @@ export default function FacultyDashboard() {
   }
 
   const defaultersList = [];
+  const addedStudents = new Set(); // ✅ Track unique student names
 
   // 2️⃣ For each student calculate attendance
   for (const student of students) {
@@ -126,12 +127,20 @@ export default function FacultyDashboard() {
     });
 
     const result = await res.json();
+    const studentName = student.profiles?.full_name;
 
-    if (result.overall < 75) {
+    // ✅ Prevent duplicate names
+    if (
+      result.overall < 75 &&
+      studentName &&
+      !addedStudents.has(studentName)
+    ) {
       defaultersList.push([
-        student.profiles.full_name,
+        studentName,
         result.overall + "%",
       ]);
+
+      addedStudents.add(studentName); // mark as added
     }
   }
 
@@ -245,11 +254,20 @@ const generateAudit = async (session) => {
 
   const presentIds = attendance?.map((a) => a.student_id) || [];
 
-  const formattedStudents =
-    students?.map((s) => [
-      s.profiles.full_name,
-      presentIds.includes(s.student_id) ? "Present" : "Absent",
-    ]) || [];
+  const formattedStudents = [];
+  const addedStudents = new Set(); // ✅ Track unique student_ids
+
+  // 3️⃣ Format students (avoid duplicates)
+  students?.forEach((s) => {
+    if (!addedStudents.has(s.student_id)) {
+      formattedStudents.push([
+        s.profiles?.full_name,
+        presentIds.includes(s.student_id) ? "Present" : "Absent",
+      ]);
+
+      addedStudents.add(s.student_id); // mark as added
+    }
+  });
 
   // ==========================
   // CREATE PDF
@@ -257,7 +275,7 @@ const generateAudit = async (session) => {
   const doc = new jsPDF();
 
   // Dark background
-  doc.setFillColor(17, 24, 39); // dark slate
+  doc.setFillColor(17, 24, 39);
   doc.rect(0, 0, 210, 297, "F");
 
   // Title
@@ -278,9 +296,7 @@ const generateAudit = async (session) => {
     48
   );
   doc.text(
-    `Created At: ${new Date(
-      session.created_at
-    ).toLocaleString()}`,
+    `Created At: ${new Date(session.created_at).toLocaleString()}`,
     20,
     56
   );
@@ -292,7 +308,7 @@ const generateAudit = async (session) => {
     body: formattedStudents,
     theme: "grid",
     styles: {
-      fillColor: [30, 41, 59], // row background
+      fillColor: [30, 41, 59],
       textColor: [255, 255, 255],
     },
     headStyles: {
