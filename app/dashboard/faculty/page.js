@@ -16,10 +16,7 @@ export default function FacultyDashboard() {
   const [selectedSubject, setSelectedSubject] = useState("");
   const [loading, setLoading] = useState(true);
   const [userId, setUserId] = useState(null);
-
-  const [defaulters, setDefaulters] = useState([]);
-  const [logs, setLogs] = useState([]);
-  const [facultyStatus, setFacultyStatus] = useState("");
+  const [defaulterClass, setDefaulterClass] = useState("");
   const [ongoingSessions, setOngoingSessions] = useState([]);
     const [createdSessions, setCreatedSessions] = useState([]);
   const [auditData, setAuditData] = useState(null);
@@ -97,7 +94,7 @@ export default function FacultyDashboard() {
   // -----------------------------
 
   const generateDefaulters = async () => {
-  if (!selectedClass) {
+  if (!defaulterClass) {
     alert("Please select a class first");
     return;
   }
@@ -109,7 +106,7 @@ export default function FacultyDashboard() {
       student_id,
       profiles (full_name)
     `)
-    .eq("class_id", selectedClass);
+    .eq("class_id", defaulterClass);
 
   if (!students || students.length === 0) {
     alert("No students found");
@@ -149,7 +146,7 @@ export default function FacultyDashboard() {
   doc.text("DEFAULTER LIST", 105, 20, { align: "center" });
 
   doc.setFontSize(12);
-  doc.text(`Class ID: ${selectedClass}`, 20, 40);
+  doc.text(`Class : ${defaulterClass?.className}`, 20, 40);
   doc.text(
     `Generated At: ${new Date().toLocaleString()}`,
     20,
@@ -413,17 +410,28 @@ const generateAudit = async (session) => {
           </div>
         )}
 
-        {/* AUTO DEFAULTER */}
-        <div className={styles.card}>
-          <h2 className={styles.cardTitle}>
-            📉 Auto-Defaulter List Generator
-          </h2>
+      <div className={styles.card}>
+  <h2 className={styles.cardTitle}>
+    📉 Auto-Defaulter List Generator
+  </h2>
 
-          <button className={styles.btn} onClick={generateDefaulters}>
-            Generate List
-          </button>
+  <select
+    className={styles.input}
+    value={defaulterClass}
+    onChange={(e) => setDefaulterClass(e.target.value)}
+  >
+    <option value="">-- Select Class --</option>
+    {classes.map((cls) => (
+      <option key={cls.class_id} value={cls.class_id}>
+        {cls.class_name}
+      </option>
+    ))}
+  </select>
 
-        </div>
+  <button className={styles.btn} onClick={generateDefaulters}>
+    Generate List
+  </button>
+</div>
 
         {/* CREATE SESSION */}
         <div className={styles.card}>
@@ -521,21 +529,7 @@ const generateAudit = async (session) => {
         </div>
 
         {/* FACULTY ATTENDANCE */}
-        <div className={`${styles.card} ${styles.fullWidth}`}>
-          <h2 className={styles.cardTitle}>
-            👩‍🏫 Faculty Attendance
-          </h2>
-
-          <button className={styles.btn}>
-            Scan QR to Mark Attendance
-          </button>
-
-          {facultyStatus && (
-            <p className={styles.successMsg}>
-              {facultyStatus}
-            </p>
-          )}
-        </div>
+       
       </div>
     </div>
   );
