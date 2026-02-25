@@ -1,0 +1,222 @@
+.wrapper {
+  font-family: "Segoe UI", sans-serif;
+  background: linear-gradient(135deg, #0f172a, #1e293b);
+  min-height: 100vh;
+  color: #e2e8f0;
+}
+
+/* Header */
+.header {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  background: rgba(15, 23, 42, 0.9);
+  backdrop-filter: blur(10px);
+  padding: 25px 0;
+  border-bottom: 1px solid #1f2937;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.pageTitle {
+  color: #38b2ac;
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  margin: 0;
+}
+
+.welcomeText {
+  margin-top: 6px;
+  color: #94a3b8;
+}
+
+/* Logout Button */
+.logoutBtn {
+  margin-top: 15px;
+  width: fit-content;
+  position: absolute;
+  right: 40px;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
+  color: white;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.logoutBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(220, 38, 38, 0.4);
+}
+
+/* Layout */
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 40px auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+/* Cards */
+.card {
+  background: rgba(30, 41, 59, 0.85);
+  backdrop-filter: blur(12px);
+  border-radius: 16px;
+  padding: 25px;
+  border: 1px solid #1f2937;
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.5),
+    0 0 30px rgba(56, 178, 172, 0.06);
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow:
+    0 15px 40px rgba(0, 0, 0, 0.6),
+    0 0 40px rgba(56, 178, 172, 0.12);
+}
+
+.fullWidth {
+  grid-column: span 2;
+}
+
+.cardTitle {
+  color: #38b2ac;
+  margin-bottom: 18px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* Inputs */
+.input {
+  width: 100%;
+  padding: 12px 14px;
+  margin-bottom: 14px;
+  border-radius: 10px;
+  border: 1px solid #334155;
+  background: #0f172a;
+  color: #ffffff;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.input::placeholder {
+  color: #94a3b8;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #38b2ac;
+  box-shadow: 0 0 0 3px rgba(56, 178, 172, 0.2);
+}
+
+/* Buttons */
+.btn {
+  background: linear-gradient(135deg, #38b2ac, #2c9a93);
+  color: white;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(56, 178, 172, 0.4);
+}
+
+/* Table */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+.tableHeader {
+  background: #0f172a;
+  color: #38b2ac;
+  padding: 12px;
+  font-weight: 500;
+  text-align: center;
+}
+
+.tableCell {
+  padding: 12px;
+  border-top: 1px solid #1f2937;
+  text-align: center;
+  color: #cbd5e1;
+}
+
+.tableRow:hover {
+  background: rgba(56, 178, 172, 0.05);
+}
+
+/* Chips */
+.chip {
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.chipDefaulter {
+  background: rgba(248, 113, 113, 0.15);
+  color: #f87171;
+  border: 1px solid rgba(248, 113, 113, 0.3);
+}
+
+/* Log Container */
+.logContainer {
+  max-height: 180px;
+  overflow-y: auto;
+  background: #0f172a;
+  border-radius: 10px;
+  padding: 12px;
+  border: 1px solid #1f2937;
+  font-size: 14px;
+}
+
+.logItem {
+  margin-bottom: 8px;
+}
+
+.timestamp {
+  color: #94a3b8;
+  font-size: 12px;
+}
+
+/* QR */
+.qrContainer {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.qrImage {
+  width: 200px;
+  height: 200px;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+}
+
+/* Success */
+.successMsg {
+  color: #22c55e;
+  margin-top: 10px;
+}
+
+/* Loading */
+.loading {
+  text-align: center;
+  padding: 60px;
+  font-size: 18px;
+  color: #94a3b8;
+}
