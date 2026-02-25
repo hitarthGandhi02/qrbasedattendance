@@ -1,5 +1,6 @@
 "use client";
-
+import jsPDF from "jspdf"
+import autoTable from "jspdf-autotable"
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
@@ -20,6 +21,8 @@ export default function FacultyDashboard() {
   const [logs, setLogs] = useState([]);
   const [facultyStatus, setFacultyStatus] = useState("");
   const [ongoingSessions, setOngoingSessions] = useState([]);
+    const [createdSessions, setCreatedSessions] = useState([]);
+  const [auditData, setAuditData] = useState(null);
 
   // -----------------------------
   // AUTH CHECK
@@ -92,6 +95,89 @@ export default function FacultyDashboard() {
   // -----------------------------
   // FETCH ONGOING SESSIONS
   // -----------------------------
+
+  const generateDefaulters = async () => {
+  if (!selectedClass) {
+    alert("Please select a class first");
+    return;
+  }
+
+  // 1️⃣ Get students of class
+  const { data: students } = await supabase
+    .from("student_classes")
+    .select(`
+      student_id,
+      profiles (full_name)
+    `)
+    .eq("class_id", selectedClass);
+
+  if (!students || students.length === 0) {
+    alert("No students found");
+    return;
+  }
+
+  const defaultersList = [];
+
+  // 2️⃣ For each student calculate attendance
+  for (const student of students) {
+    const res = await fetch("/api/attendance", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        student_id: student.student_id,
+      }),
+    });
+
+    const result = await res.json();
+
+    if (result.overall < 75) {
+      defaultersList.push([
+        student.profiles.full_name,
+        result.overall + "%",
+      ]);
+    }
+  }
+
+  // 3️⃣ Generate PDF
+  const doc = new jsPDF();
+
+  doc.setFillColor(17, 24, 39);
+  doc.rect(0, 0, 210, 297, "F");
+
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(20);
+  doc.text("DEFAULTER LIST", 105, 20, { align: "center" });
+
+  doc.setFontSize(12);
+  doc.text(`Class ID: ${selectedClass}`, 20, 40);
+  doc.text(
+    `Generated At: ${new Date().toLocaleString()}`,
+    20,
+    48
+  );
+
+  autoTable(doc, {
+    startY: 60,
+    head: [["Student Name", "Overall Attendance"]],
+    body: defaultersList.length
+      ? defaultersList
+      : [["No Defaulters", "-"]],
+    theme: "grid",
+    styles: {
+      fillColor: [30, 41, 59],
+      textColor: [255, 255, 255],
+    },
+    headStyles: {
+      fillColor: [31, 41, 55],
+      textColor: [255, 255, 255],
+    },
+    alternateRowStyles: {
+      fillColor: [17, 24, 39],
+    },
+  });
+
+  doc.save("Defaulter_List.pdf");
+};
   useEffect(() => {
     if (!userId) return;
 
@@ -115,6 +201,119 @@ export default function FacultyDashboard() {
     const interval = setInterval(fetchOngoing, 10000);
     return () => clearInterval(interval);
   }, [userId]);
+
+
+   // =============================
+  // FETCH ALL CREATED SESSIONS
+  // =============================
+  useEffect(() => {
+    if (!userId) return;
+
+    const fetchSessions = async () => {
+      const { data } = await supabase
+        .from("sessions")
+        .select(`
+          session_id,
+          created_at,
+          class_id (class_id, class_name),
+          subject_id (subject_id, subject_name)
+        `)
+        .eq("faculty_id", userId)
+        .order("created_at", { ascending: false });
+
+      setCreatedSessions(data || []);
+    };
+
+    fetchSessions();
+  }, [userId]);
+
+  // =============================
+  // GENERATE AUDIT
+  // =============================
+const generateAudit = async (session) => {
+  // 1️⃣ Fetch students of class
+  const { data: students } = await supabase
+    .from("student_classes")
+    .select(`
+      student_id,
+      profiles (full_name)
+    `)
+    .eq("class_id", session.class_id.class_id);
+
+  // 2️⃣ Fetch attendance of session
+  const { data: attendance } = await supabase
+    .from("attendance")
+    .select("student_id")
+    .eq("session_id", session.session_id);
+
+  const presentIds = attendance?.map((a) => a.student_id) || [];
+
+  const formattedStudents =
+    students?.map((s) => [
+      s.profiles.full_name,
+      presentIds.includes(s.student_id) ? "Present" : "Absent",
+    ]) || [];
+
+  // ==========================
+  // CREATE PDF
+  // ==========================
+  const doc = new jsPDF();
+
+  // Dark background
+  doc.setFillColor(17, 24, 39); // dark slate
+  doc.rect(0, 0, 210, 297, "F");
+
+  // Title
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(20);
+  doc.text("AUDIT REPORT", 105, 20, { align: "center" });
+
+  // Session Info
+  doc.setFontSize(12);
+  doc.text(
+    `Subject: ${session.subject_id.subject_name}`,
+    20,
+    40
+  );
+  doc.text(
+    `Class: ${session.class_id.class_name}`,
+    20,
+    48
+  );
+  doc.text(
+    `Created At: ${new Date(
+      session.created_at
+    ).toLocaleString()}`,
+    20,
+    56
+  );
+
+  // Attendance Table
+  autoTable(doc, {
+    startY: 70,
+    head: [["Student Name", "Status"]],
+    body: formattedStudents,
+    theme: "grid",
+    styles: {
+      fillColor: [30, 41, 59], // row background
+      textColor: [255, 255, 255],
+    },
+    headStyles: {
+      fillColor: [31, 41, 55],
+      textColor: [255, 255, 255],
+    },
+    alternateRowStyles: {
+      fillColor: [17, 24, 39],
+    },
+  });
+
+  // Download
+  doc.save(
+    `Audit_${session.subject_id.subject_name}_${session.class_id.class_name}.pdf`
+  );
+};
+
+
 
   // -----------------------------
   // CREATE SESSION
@@ -220,38 +419,10 @@ export default function FacultyDashboard() {
             📉 Auto-Defaulter List Generator
           </h2>
 
-          <button className={styles.btn}>
+          <button className={styles.btn} onClick={generateDefaulters}>
             Generate List
           </button>
 
-          {defaulters.length > 0 && (
-            <table className={styles.table}>
-              <thead>
-                <tr>
-                  <th className={styles.tableHeader}>Name</th>
-                  <th className={styles.tableHeader}>Roll</th>
-                  <th className={styles.tableHeader}>Attendance</th>
-                  <th className={styles.tableHeader}>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {defaulters.map((d, i) => (
-                  <tr key={i} className={styles.tableRow}>
-                    <td className={styles.tableCell}>{d.name}</td>
-                    <td className={styles.tableCell}>{d.roll}</td>
-                    <td className={styles.tableCell}>{d.att}</td>
-                    <td className={styles.tableCell}>
-                      <span
-                        className={`${styles.chip} ${styles.chipDefaulter}`}
-                      >
-                        Defaulter
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
         </div>
 
         {/* CREATE SESSION */}
@@ -294,17 +465,59 @@ export default function FacultyDashboard() {
         {/* AUDIT LOGS */}
         <div className={`${styles.card} ${styles.fullWidth}`}>
           <h2 className={styles.cardTitle}>📜 Audit Logs</h2>
-          <div className={styles.logContainer}>
-            {logs.length === 0 ? (
-              <p>No logs yet...</p>
-            ) : (
-              logs.map((log, i) => (
-                <div key={i} className={styles.logItem}>
-                  {log.message}
-                </div>
-              ))
-            )}
-          </div>
+
+          {createdSessions.map((session) => (
+            <div
+              key={session.session_id}
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                marginBottom: "10px",
+              }}
+            >
+              <span>
+                {session.subject_id?.subject_name} (
+                {session.class_id?.class_name})
+              </span>
+
+              <button
+                className={styles.btn}
+                style={{ width: "140px" }}
+                onClick={() => generateAudit(session)}
+              >
+                View Audit
+              </button>
+            </div>
+          ))}
+
+          {auditData && (
+            <div style={{ marginTop: "20px" }}>
+              <h3>
+                {auditData.subject_name} - {auditData.class_name}
+              </h3>
+              <p>
+                Created At:{" "}
+                {new Date(auditData.created_at).toLocaleString()}
+              </p>
+
+              <table className={styles.table}>
+                <thead>
+                  <tr>
+                    <th>Student</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {auditData.students.map((student, i) => (
+                    <tr key={i}>
+                      <td>{student.name}</td>
+                      <td>{student.status}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
 
         {/* FACULTY ATTENDANCE */}

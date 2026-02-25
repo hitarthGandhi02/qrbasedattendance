@@ -6,7 +6,10 @@ import { useState, useEffect } from "react";
 import styles from "./parent.module.css";
 
 export default function ParentDashboard() {
-     useEffect(() => {
+
+  const router = useRouter();
+  const [ackMessage, setAckMessage] = useState("");
+       useEffect(() => {
     const checkUser = async () => {
       const { data } = await supabase.auth.getUser();
       if (!data.user) {
@@ -15,9 +18,6 @@ export default function ParentDashboard() {
     };
     checkUser();
   }, []);
-  const router = useRouter();
-  const [ackMessage, setAckMessage] = useState("");
-
   useEffect(() => {
     const checkUser = async () => {
       const { data } = await supabase.auth.getUser();

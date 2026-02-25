@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
 import { useEffect, useState } from "react";
-import styles from "./studentDashboard.module.css";
+import styles from "./page.module.css";
 
 export default function StudentDashboard() {
   const router = useRouter();
@@ -38,6 +38,9 @@ export default function StudentDashboard() {
       }
 
       setStudentName(profile.full_name);
+      
+      
+      
 
       // 🔹 Get student subjects
       const { data: studentSubjects } = await supabase
@@ -49,8 +52,52 @@ export default function StudentDashboard() {
           )
         `)
         .eq("student_id", user.id);
-          console.log("Student subject : ",studentSubjects) 
-      // 🔹 Get attendance records
+          
+      const subjectStats = [];
+      for (const sub of studentSubjects || []) {
+  const res = await fetch("/api/attendance", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      student_id: user.id,
+      subject_id: sub.subject_id,
+    }),
+  });
+
+  const data = await res.json();
+
+  subjectStats.push({
+    subject_id: data.subject_id,
+    subject_name: data.subject_name,
+    percent: data.percent || 0,
+  });
+}
+// 🔹 Get Attendance (Single API Call)
+const res = await fetch("/api/attendance", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    student_id: user.id,
+  }),
+});
+
+const attendanceResult = await res.json();
+
+setSubjectAttendance(attendanceResult.subjects || []);
+setAttendancePercent(attendanceResult.overall || 0);
+// alert(attendanceResult.overall);
+
+
+// const avg =
+//   subjectStats.length > 0
+//     ? Math.round(
+//         subjectStats.reduce((acc, s) => acc + s.percent, 0) /
+//           subjectStats.length
+//       )
+//     : 0;
+// alert(avg)
+// setAttendancePercent(avg);
+
 
 // 🔹 Get all sessions of student's subjects
 const { data: allSessions } = await supabase
@@ -71,41 +118,8 @@ const { data: attendanceData } = await supabase
     )
   `)
   .eq("student_id", user.id);
-const subjectStats =
-  studentSubjects?.map((sub) => {
-    const subjectSessions = allSessions?.filter(
-      (s) => s.subject_id === sub.subject_id
-    ) || [];
-    
 
-    const presentCount = attendanceData?.filter((a) =>
-      subjectSessions.some((s) => s.session_id === a.session_id)
-    ).length || 0;
-    const totalSessions = subjectSessions.length;
-    
-    const percent =
-      totalSessions > 0
-        ? Math.round((presentCount / totalSessions) * 100)
-        : 0;
 
-    return {
-      subject_name: sub.subjects.subject_name,
-      percent,
-    };
-  }) || [];
-
-      setSubjectAttendance(subjectStats);
-
-      // 🔹 Overall average
-      const avg =
-        subjectStats.length > 0
-          ? Math.round(
-              subjectStats.reduce((acc, s) => acc + s.percent, 0) /
-                subjectStats.length
-            )
-          : 0;
-
-      setAttendancePercent(avg);
 
       // 🔹 Recent Attendance (latest 5)
 const recent = attendanceData
