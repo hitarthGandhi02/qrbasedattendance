@@ -1,155 +1,653 @@
+body {
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+
+}
 .wrapper {
-  font-family: "Poppins", sans-serif;
-  background-color: #1e293b;
+  font-family: "Segoe UI", sans-serif;
+  background: linear-gradient(135deg, #0f172a, #1e293b);
   min-height: 100vh;
   color: #e2e8f0;
 }
 
+/* Header */
 .header {
-  background-color: #0f172a;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(15, 23, 42, 0.9);
+  backdrop-filter: blur(8px);
+  padding: 25px 0;
   text-align: center;
-  padding: 20px 0;
-  border-bottom: 1px solid #2d3748;
+  border-bottom: 1px solid #1f2937;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
 }
-
 .pageTitle {
-  color: #38b2ac;
   margin: 0;
+  font-size: 28px;
+  font-weight: 600;
+  color: #0070f3;
+  letter-spacing: 0.5px;
 }
 
 .welcomeText {
-  margin-top: 5px;
+  margin-top: 6px;
+  color: #94a3b8;
 }
 
+/* Grid Layout */
 .container {
   width: 90%;
   max-width: 1200px;
-  margin: 30px auto;
+  margin: 40px auto 5px auto;
   display: grid;
   grid-template-columns: 2fr 1fr;
-  gap: 20px;
+  gap: 24px;
 }
 
+/* Cards */
 .card {
-  background-color: #273248;
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  background: rgba(30, 41, 59, 0.8);
+  backdrop-filter: blur(12px);
+  border-radius: 16px;
+  padding: 25px;
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.5),
+    0 0 25px rgba(0, 112, 243, 0.08);
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow:
+    0 15px 40px rgba(0, 0, 0, 0.6),
+    0 0 35px rgba(0, 112, 243, 0.15);
 }
 
 .cardTitle {
-  color: #38b2ac;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #0070f3;
 }
 
+/* Progress Circle */
 .progressCircle {
-  width: 150px;
-  height: 150px;
+  width: 160px;
+  height: 160px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 20px auto;
+  margin: 25px auto;
+  position: relative;
+}
+
+.progressCircle::before {
+  content: "";
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  background: #0f172a;
+  border-radius: 50%;
 }
 
 .progressText {
-  font-size: 32px;
-  font-weight: bold;
+  position: relative;
+  font-size: 28px;
+  font-weight: 600;
+  color: #ffffff;
 }
 
+/* Warning */
 .warningBanner {
-  background-color: #dd6b20;
-  padding: 6px 14px;
+  background: rgba(220, 38, 38, 0.15);
+  color: #f87171;
+  padding: 8px 16px;
   border-radius: 20px;
+  font-size: 13px;
   display: inline-block;
-  margin-top: 10px;
-  font-size: 14px;
-  color: white;
+  margin-top: 12px;
+  border: 1px solid rgba(248, 113, 113, 0.3);
 }
 
+/* Button */
 .btn {
-  background-color: #38b2ac;
-  color: white;
-  padding: 12px 18px;
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(135deg, #0070f3, #005ecb);
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
+  color: white;
+  font-weight: 500;
+  font-size: 14px;
   cursor: pointer;
-  font-weight: bold;
-  font-size: 15px;
+  transition: all 0.3s ease;
 }
 
 .btn:hover {
-  background-color: #2c9a93;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 112, 243, 0.4);
 }
 
-.qrIcon {
-  font-size: 48px;
-  color: #38b2ac;
-  margin-bottom: 10px;
-}
-
+/* Schedule */
 .scheduleList {
   list-style: none;
-  padding-left: 0;
+  padding: 0;
 }
 
 .scheduleItem {
-  margin: 8px 0;
+  padding: 8px 0;
+  border-bottom: 1px solid #1f2937;
+  color: #cbd5e1;
 }
 
+/* Recent Attendance Full Width */
 .recentCard {
   grid-column: span 2;
+}
+
+/* Table */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+.tableHeader {
+  background: #0f172a;
+  color: #0070f3;
+  padding: 12px;
+  text-align: center;
+  font-weight: 500;
+}
+
+.tableCell {
+  padding: 12px;
+  text-align: center;
+  border-top: 1px solid #1f2937;
+  color: #cbd5e1;
+}
+
+.tableRow:hover {
+  background: rgba(0, 112, 243, 0.05);
+}
+
+/* Status Badges */
+.badge {
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.present {
+  background: rgba(34, 197, 94, 0.15);
+  color: #22c55e;
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.absent {
+  background: rgba(248, 113, 113, 0.15);
+  color: #f87171;
+  border: 1px solid rgba(248, 113, 113, 0.3);
+}
+
+/* Logout */
+.logoutBtn {
+  width: fit-content;
+  position: absolute;
+  right: 20px;
+  padding: 12px 18px;
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
+  border: none;
+  border-radius: 10px;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.logoutBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(220, 38, 38, 0.4);
+}
+
+.loading {
+  text-align: center;
+  padding: 60px;
+  font-size: 18px;
+  color: #94a3b8;
+}
+/* ============================= */
+/* 📋 Recent Attendance Table */
+/* ============================= */
+
+.recentCard {
+  padding: 20px;
 }
 
 .table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 10px;
+  margin-top: 15px;
+  background: #1e1e1e;
+  border-radius: 10px;
+  overflow: hidden;
 }
 
-.tableRow {}
-
-.tableHeader {
-  border: 1px solid #2d3748;
-  padding: 10px;
-  text-align: center;
-  background-color: #1e293b;
-  color: #38b2ac;
+.table thead {
+  background-color: #2a2a2a;
 }
 
-.tableCell {
-  border: 1px solid #2d3748;
-  padding: 10px;
-  text-align: center;
+.table th {
+  padding: 12px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 14px;
+  color: #f6ad55;
+  border-bottom: 1px solid #333;
 }
+
+.table td {
+  padding: 12px;
+  font-size: 14px;
+  border-bottom: 1px solid #333;
+  color: #e5e5e5;
+}
+
+.table tbody tr {
+  transition: background 0.2s ease;
+}
+
+.table tbody tr:hover {
+  background-color: #2c2c2c;
+}
+
+.table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* ============================= */
+/* 🏷 Status Badges */
+/* ============================= */
 
 .badge {
   padding: 4px 10px;
-  border-radius: 12px;
-  font-size: 13px;
-  font-weight: bold;
-  color: white;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-block;
 }
 
 .present {
-  background-color: #48bb78;
+  background-color: rgba(34, 197, 94, 0.15);
+  color: #22c55e;
 }
 
 .absent {
-  background-color: #f6ad55;
+  background-color: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+}
+body {
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+
+}
+.wrapper {
+  font-family: "Segoe UI", sans-serif;
+  background: linear-gradient(135deg, #0f172a, #1e293b);
+  min-height: 100vh;
+  color: #e2e8f0;
 }
 
-.logoutBtn {
-  margin-top: 20px;
-  padding: 10px 16px;
+/* Header */
+.header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(15, 23, 42, 0.9);
+  backdrop-filter: blur(8px);
+  padding: 25px 0;
+  text-align: center;
+  border-bottom: 1px solid #1f2937;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+.pageTitle {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 600;
+  color: #0070f3;
+  letter-spacing: 0.5px;
+}
+
+.welcomeText {
+  margin-top: 6px;
+  color: #94a3b8;
+}
+
+/* Grid Layout */
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 40px auto 5px auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+}
+
+/* Cards */
+.card {
+  background: rgba(30, 41, 59, 0.8);
+  backdrop-filter: blur(12px);
+  border-radius: 16px;
+  padding: 25px;
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.5),
+    0 0 25px rgba(0, 112, 243, 0.08);
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow:
+    0 15px 40px rgba(0, 0, 0, 0.6),
+    0 0 35px rgba(0, 112, 243, 0.15);
+}
+
+.cardTitle {
+  margin-bottom: 20px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #0070f3;
+}
+
+/* Progress Circle */
+.progressCircle {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 25px auto;
+  position: relative;
+}
+
+.progressCircle::before {
+  content: "";
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  background: #0f172a;
+  border-radius: 50%;
+}
+
+.progressText {
+  position: relative;
+  font-size: 28px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+/* Warning */
+.warningBanner {
+  background: rgba(220, 38, 38, 0.15);
+  color: #f87171;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  display: inline-block;
+  margin-top: 12px;
+  border: 1px solid rgba(248, 113, 113, 0.3);
+}
+
+/* Button */
+.btn {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(135deg, #0070f3, #005ecb);
   border: none;
-  border-radius: 8px;
-  background-color: #e53e3e;
+  border-radius: 10px;
+  color: white;
+  font-weight: 500;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 112, 243, 0.4);
+}
+
+/* Schedule */
+.scheduleList {
+  list-style: none;
+  padding: 0;
+}
+
+.scheduleItem {
+  padding: 8px 0;
+  border-bottom: 1px solid #1f2937;
+  color: #cbd5e1;
+}
+
+/* Recent Attendance Full Width */
+.recentCard {
+  grid-column: span 2;
+}
+
+/* Table */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+.tableHeader {
+  background: #0f172a;
+  color: #0070f3;
+  padding: 12px;
+  text-align: center;
+  font-weight: 500;
+}
+
+.tableCell {
+  padding: 12px;
+  text-align: center;
+  border-top: 1px solid #1f2937;
+  color: #cbd5e1;
+}
+
+.tableRow:hover {
+  background: rgba(0, 112, 243, 0.05);
+}
+
+/* Status Badges */
+.badge {
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.present {
+  background: rgba(34, 197, 94, 0.15);
+  color: #22c55e;
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.absent {
+  background: rgba(248, 113, 113, 0.15);
+  color: #f87171;
+  border: 1px solid rgba(248, 113, 113, 0.3);
+}
+
+/* Logout */
+.logoutBtn {
+  width: fit-content;
+  position: absolute;
+  right: 20px;
+  padding: 12px 18px;
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
+  border: none;
+  border-radius: 10px;
   color: white;
   cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.logoutBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(220, 38, 38, 0.4);
 }
 
 .loading {
   text-align: center;
-  padding: 40px;
+  padding: 60px;
+  font-size: 18px;
+  color: #94a3b8;
+}
+/* ============================= */
+/* 📋 Recent Attendance Table */
+/* ============================= */
+
+.recentCard {
+  padding: 20px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+  background: #1e1e1e;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.table thead {
+  background-color: #2a2a2a;
+}
+
+.table th {
+  padding: 12px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 14px;
+  color: #f6ad55;
+  border-bottom: 1px solid #333;
+}
+
+.table td {
+  padding: 12px;
+  font-size: 14px;
+  border-bottom: 1px solid #333;
+  color: #e5e5e5;
+}
+
+.table tbody tr {
+  transition: background 0.2s ease;
+}
+
+.table tbody tr:hover {
+  background-color: #2c2c2c;
+}
+
+.table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* ============================= */
+/* 🏷 Status Badges */
+/* ============================= */
+/* ============================= */
+/* 📱 Responsive Sidebar */
+/* ============================= */
+
+.menuBtn {
+  display: none;
+  position: absolute;
+  right: 20px;
+  font-size: 22px;
+  background: none;
+  border: none;
+  color: #e2e8f0;
+  cursor: pointer;
+}
+
+/* Sidebar */
+.sidebar {
+  position: fixed;
+  top: 0;
+  right: -260px;
+  width: 260px;
+  height: 100vh;
+  background: #111827;
+  box-shadow: -5px 0 20px rgba(0, 0, 0, 0.6);
+  padding: 100px 20px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;   /* 👈 centers horizontally */
+  justify-content: flex-start;
+
+  transition: right 0.3s ease;
+  z-index: 1000;
+}
+
+.sidebarOpen {
+  right: 0;
+}
+
+/* Overlay */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(3px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 900;
+}
+
+.overlayOpen {
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* ============================= */
+/* 📱 Mobile Styles */
+/* ============================= */
+
+@media (max-width: 768px) {
+
+  /* Hide ONLY header logout */
+  .header .logoutBtn {
+    display: none;
+  }
+  .sidebar .logoutBtn {
+  display: block;
+  width: 80%;            /* Not full width */
+  max-width: 200px;
+  position: static;
+  margin-top: 20px;
+  text-align: center;
+}
+
+  .menuBtn {
+    display: block;
+  }
+
+  .container {
+    grid-template-columns: 1fr;
+  }
+
+  .recentCard {
+    grid-column: span 1;
+  }
 }

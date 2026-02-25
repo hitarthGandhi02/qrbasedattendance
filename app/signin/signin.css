@@ -1,50 +1,94 @@
 body {
-  background: #f4f6f9;
-  font-family: Arial, Helvetica, sans-serif;
-  color: black;
+  margin: 0;
+  background: linear-gradient(135deg, #0f172a, #1e293b);
+  font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
+  color: #ffffff;
 }
 
+/* Container */
 .form-container {
   width: 400px;
-  margin: 80px auto;
-  padding: 30px;
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  margin: 100px auto;
+  padding: 40px 35px;
+  background: rgba(30, 41, 59, 0.8);
+  backdrop-filter: blur(12px);
+  border-radius: 16px;
+  box-shadow: 
+    0 10px 30px rgba(0, 0, 0, 0.6),
+    0 0 40px rgba(0, 112, 243, 0.15);
   text-align: center;
+  transition: transform 0.3s ease;
 }
 
+.form-container:hover {
+  transform: translateY(-5px);
+}
+
+/* Heading */
 h2 {
-  margin-bottom: 20px;
+  margin-bottom: 25px;
+  font-weight: 600;
+  color: #0070f3;
+  letter-spacing: 0.5px;
 }
 
-select,
+/* Inputs */
 input {
   width: 100%;
-  padding: 10px;
-  margin: 10px 0;
-  border-radius: 5px;
-  border: 1px solid #ccc;
+  padding: 12px 14px;
+  margin: 12px 0;
+  border-radius: 8px;
+  border: 1px solid #334155;
   font-size: 14px;
+  background: #0f172a;
+  color: #ffffff;
+  transition: all 0.3s ease;
 }
 
+input::placeholder {
+  color: #94a3b8;
+}
+
+input:focus {
+  border-color: #0070f3;
+  box-shadow: 0 0 0 3px rgba(0, 112, 243, 0.25);
+  outline: none;
+}
+
+/* Button */
 button {
   width: 100%;
-  padding: 10px;
-  background: #0070f3;
+  padding: 12px;
+  background: linear-gradient(135deg, #0070f3, #005ecb);
   color: white;
   border: none;
-  border-radius: 5px;
+  border-radius: 8px;
   cursor: pointer;
-  margin-top: 10px;
+  margin-top: 15px;
   font-size: 15px;
+  font-weight: 500;
+  transition: all 0.3s ease;
 }
 
 button:hover {
-  background: #005ecb;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 112, 243, 0.4);
 }
 
+/* Register link */
 .register-link {
-  margin-top: 15px;
+  margin-top: 20px;
   font-size: 14px;
+  color: #cbd5e1;
+}
+
+.register-link a {
+  color: #0070f3;
+  font-weight: 500;
+  text-decoration: none;
+  transition: 0.2s;
+}
+
+.register-link a:hover {
+  text-decoration: underline;
 }

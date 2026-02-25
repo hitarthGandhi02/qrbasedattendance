@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
-import QRCode from "qrcode";
 import styles from "./facultyDashboard.module.css";
 
 export default function FacultyDashboard() {
@@ -14,13 +13,17 @@ export default function FacultyDashboard() {
   const [subjects, setSubjects] = useState([]);
   const [selectedClass, setSelectedClass] = useState("");
   const [selectedSubject, setSelectedSubject] = useState("");
-  const [qrImage, setQrImage] = useState("");
   const [loading, setLoading] = useState(true);
   const [userId, setUserId] = useState(null);
-  const [logs, setLogs] = useState([]);
-  const [defaulters, setDefaulters] = useState([]);
-  const [facultyStatus, setFacultyStatus] = useState("");
 
+  const [defaulters, setDefaulters] = useState([]);
+  const [logs, setLogs] = useState([]);
+  const [facultyStatus, setFacultyStatus] = useState("");
+  const [ongoingSessions, setOngoingSessions] = useState([]);
+
+  // -----------------------------
+  // AUTH CHECK
+  // -----------------------------
   useEffect(() => {
     const checkUser = async () => {
       const {
@@ -59,6 +62,9 @@ export default function FacultyDashboard() {
     checkUser();
   }, [router]);
 
+  // -----------------------------
+  // FETCH SUBJECTS
+  // -----------------------------
   useEffect(() => {
     const fetchSubjects = async () => {
       if (!selectedClass || !userId) return;
@@ -83,12 +89,42 @@ export default function FacultyDashboard() {
     fetchSubjects();
   }, [selectedClass, userId]);
 
+  // -----------------------------
+  // FETCH ONGOING SESSIONS
+  // -----------------------------
+  useEffect(() => {
+    if (!userId) return;
+
+    const fetchOngoing = async () => {
+      const { data } = await supabase
+        .from("sessions")
+        .select(`
+          session_id,
+          expires_at,
+          class_id (class_name),
+          subject_id (subject_name)
+        `)
+        .eq("faculty_id", userId)
+        .gt("expires_at", new Date().toISOString());
+
+      setOngoingSessions(data || []);
+    };
+
+    fetchOngoing();
+
+    const interval = setInterval(fetchOngoing, 10000);
+    return () => clearInterval(interval);
+  }, [userId]);
+
+  // -----------------------------
+  // CREATE SESSION
+  // -----------------------------
   const generateQR = async () => {
     if (!selectedClass || !selectedSubject) {
       alert("Please select class and subject");
       return;
     }
-  
+
     const res = await fetch("/api/create-session", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -98,30 +134,16 @@ export default function FacultyDashboard() {
         subject_id: selectedSubject,
       }),
     });
-  
+
     const result = await res.json();
-  
+
     if (result.error) {
       alert(result.error);
       return;
     }
-  
+
     router.push(`/dashboard/faculty/session/${result.session.session_id}`);
-
   };
-  
-
-  const addLog = (message) => {
-    const time = new Date().toLocaleTimeString([], {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-    const date = new Date().toLocaleDateString();
-    setLogs((prev) => [{ message, time, date }, ...prev]);
-  };
-
-
-
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -132,12 +154,67 @@ export default function FacultyDashboard() {
 
   return (
     <div className={styles.wrapper}>
+      {/* HEADER */}
       <header className={styles.header}>
-        <h1 className={styles.pageTitle}>Faculty Dashboard</h1>
-        <p className={styles.welcomeText}>Welcome, {facultyName}</p>
+        <div>
+          <h1 className={styles.pageTitle}>Faculty Dashboard</h1>
+          <p className={styles.welcomeText}>Welcome, {facultyName}</p>
+        </div>
+
+        <button className={styles.logoutBtn} onClick={handleLogout}>
+          Logout
+        </button>
       </header>
 
       <div className={styles.container}>
+        {/* ONGOING SESSION CARD */}
+        {ongoingSessions.length > 0 && (
+          <div className={`${styles.card} ${styles.fullWidth}`}>
+            <h2 className={styles.cardTitle}>🟢 Ongoing Sessions</h2>
+
+            <table className={styles.table}>
+              <thead>
+                <tr>
+                  <th className={styles.tableHeader}>Class</th>
+                  <th className={styles.tableHeader}>Subject</th>
+                  <th className={styles.tableHeader}>Status</th>
+                  <th className={styles.tableHeader}>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {ongoingSessions.map((session) => (
+                  <tr key={session.session_id} className={styles.tableRow}>
+                    <td className={styles.tableCell}>
+                      {session.class_id?.class_name}
+                    </td>
+                    <td className={styles.tableCell}>
+                      {session.subject_id?.subject_name}
+                    </td>
+                    <td className={styles.tableCell}>
+                      <span className={styles.successMsg}>
+                        Active
+                      </span>
+                    </td>
+                    <td className={styles.tableCell}>
+                      <button
+                        className={styles.btn}
+                        onClick={() =>
+                          router.push(
+                            `/dashboard/faculty/session/${session.session_id}`
+                          )
+                        }
+                      >
+                        Go to QR
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+
+        {/* AUTO DEFAULTER */}
         <div className={styles.card}>
           <h2 className={styles.cardTitle}>
             📉 Auto-Defaulter List Generator
@@ -150,7 +227,7 @@ export default function FacultyDashboard() {
           {defaulters.length > 0 && (
             <table className={styles.table}>
               <thead>
-                <tr className={styles.tableRow}>
+                <tr>
                   <th className={styles.tableHeader}>Name</th>
                   <th className={styles.tableHeader}>Roll</th>
                   <th className={styles.tableHeader}>Attendance</th>
@@ -177,7 +254,7 @@ export default function FacultyDashboard() {
           )}
         </div>
 
-      
+        {/* CREATE SESSION */}
         <div className={styles.card}>
           <h2 className={styles.cardTitle}>
             📲 Create New Lecture Session
@@ -212,26 +289,25 @@ export default function FacultyDashboard() {
           <button className={styles.btn} onClick={generateQR}>
             Generate QR Code
           </button>
-
-          {qrImage && (
-            <div className={styles.qrContainer}>
-              <img
-                src={qrImage}
-                alt="QR Code"
-                className={styles.qrImage}
-              />
-              <p className={styles.successMsg}>
-                QR generated successfully
-              </p>
-            </div>
-          )}
         </div>
+
+        {/* AUDIT LOGS */}
         <div className={`${styles.card} ${styles.fullWidth}`}>
           <h2 className={styles.cardTitle}>📜 Audit Logs</h2>
           <div className={styles.logContainer}>
-            
+            {logs.length === 0 ? (
+              <p>No logs yet...</p>
+            ) : (
+              logs.map((log, i) => (
+                <div key={i} className={styles.logItem}>
+                  {log.message}
+                </div>
+              ))
+            )}
           </div>
         </div>
+
+        {/* FACULTY ATTENDANCE */}
         <div className={`${styles.card} ${styles.fullWidth}`}>
           <h2 className={styles.cardTitle}>
             👩‍🏫 Faculty Attendance
@@ -247,9 +323,6 @@ export default function FacultyDashboard() {
             </p>
           )}
         </div>
-        <button className={styles.logoutBtn} onClick={handleLogout}>
-          Logout
-        </button>
       </div>
     </div>
   );

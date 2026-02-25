@@ -14,7 +14,7 @@ export async function POST(req) {
     const session_code = uuidv4();
     const qr_token = uuidv4();
 
-    const expires_at = new Date(Date.now() + 5 * 60 * 1000).toISOString();
+    const expires_at = new Date(Date.now() + 1 * 60 * 1000).toISOString();
 
     const { data, error } = await supabase
       .from("sessions")
@@ -25,7 +25,7 @@ export async function POST(req) {
           subject_id,
           session_code,
           qr_token,
-          expires_at,        // <-- add this
+          expires_at,        
           created_at: new Date().toISOString(),
         },
       ])

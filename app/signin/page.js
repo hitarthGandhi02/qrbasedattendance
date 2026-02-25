@@ -67,9 +67,7 @@ const handleLogin = async (e) => {
         <button type="submit">Login</button>
       </form>
 
-      <p className="register-link">
-        New student? <a href="/signup/student">Register here</a>
-      </p>
+
       
     </div>
   )

@@ -1,91 +1,139 @@
-.body {
-  font-family: "Poppins", sans-serif;
-  background-color: #f4f6f8;
+body {
+  margin: 0;
+  font-family: "Segoe UI", sans-serif;
+  background: linear-gradient(135deg, #0f172a, #1e293b);
+  color: #e2e8f0;
   min-height: 100vh;
-  color: balck;
 }
 
+/* Header */
 .header {
-  background-color: #009879;
-  color: white;
-  padding: 15px 20px;
+  position: relative;
+  background: rgba(15, 23, 42, 0.9);
+  backdrop-filter: blur(10px);
+  padding: 20px 40px;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
+  border-bottom: 1px solid #1f2937;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
 }
 
-.container {
-  width: 90%;
-  max-width: 1000px;
-  margin: 20px auto;
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  padding: 20px;
-}
-
-.card {
-  background: #f9fafc;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 15px;
-  margin-bottom: 15px;
-}
-
+/* Centered Title */
 .heading {
   color: #009879;
-  margin-bottom: 10px;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
 }
 
-.table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 10px;
-}
-
-.table th,
-.table td {
-  border: 1px solid #ccc;
-  padding: 8px;
-  text-align: center;
-}
-
-.table th {
-  background-color: #009879;
-  color: white;
-}
-
-.btn {
-  background-color: #009879;
-  color: white;
-  padding: 6px 12px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.btn:hover {
-  background-color: #007a63;
-}
-
+/* Logout Button Top Right */
 .logoutBtn {
-  background-color: white;
-  color: #009879;
+  position: absolute;
+  right: 40px;
+  padding: 8px 16px;
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
+  color: white;
   border: none;
-  padding: 8px 14px;
-  border-radius: 5px;
+  border-radius: 8px;
   cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
 }
 
 .logoutBtn:hover {
-  background-color: #f0f0f0;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(220, 38, 38, 0.4);
 }
 
+/* Container */
+.container {
+  width: 90%;
+  max-width: 1000px;
+  margin: 40px auto;
+  background: rgba(30, 41, 59, 0.8);
+  backdrop-filter: blur(12px);
+  border-radius: 16px;
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.6),
+    0 0 30px rgba(0, 152, 121, 0.08);
+  padding: 30px;
+}
+
+/* Cards */
+.card {
+  background: rgba(15, 23, 42, 0.7);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  border: 1px solid #1f2937;
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* Table */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+.table th {
+  background: #0f172a;
+  color: #009879;
+  padding: 12px;
+  font-weight: 500;
+}
+
+.table td {
+  padding: 12px;
+  border-top: 1px solid #1f2937;
+  color: #cbd5e1;
+  text-align: center;
+}
+
+.table tr:hover {
+  background: rgba(0, 152, 121, 0.05);
+}
+
+/* Primary Button */
+.btn {
+  background: linear-gradient(135deg, #009879, #007a63);
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 152, 121, 0.4);
+}
+
+/* Alerts */
 .alert {
-  color: #d9534f;
+  margin-top: 10px;
+  padding: 8px 14px;
+  background: rgba(220, 38, 38, 0.15);
+  color: #f87171;
+  border: 1px solid rgba(248, 113, 113, 0.3);
+  border-radius: 8px;
 }
 
 .success {
   margin-top: 10px;
-  color: green;
+  padding: 8px 14px;
+  background: rgba(34, 197, 94, 0.15);
+  color: #22c55e;
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  border-radius: 8px;
 }
