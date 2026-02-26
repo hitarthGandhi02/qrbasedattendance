@@ -17,7 +17,6 @@ export async function POST(req) {
       );
     }
 
-    // 🔹 Get student subjects
     const { data: studentSubjects, error: subjectError } = await supabase
       .from("student_classes")
       .select(`
@@ -38,7 +37,6 @@ export async function POST(req) {
     const subjectsResult = [];
 
     for (const sub of studentSubjects) {
-      // 🔹 Get all sessions of this subject
       const { data: sessions } = await supabase
         .from("sessions")
         .select("session_id")

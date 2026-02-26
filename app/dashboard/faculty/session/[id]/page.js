@@ -14,8 +14,6 @@ export default function LiveSession() {
   const [students, setStudents] = useState([]);
   const [expiresAt, setExpiresAt] = useState(null);
 
-  // 🔹 Fetch session details (including expires_at)
-  
   useEffect(() => {
   if (timeLeft === 0 && expiresAt) {
     const endSession = async () => {
@@ -47,7 +45,6 @@ export default function LiveSession() {
       if (!session) return;
       console.log("session : ", session)
 
-      // Generate QR
       const qrData = JSON.stringify({
         session_code: session.session_code,
       });
@@ -60,8 +57,6 @@ export default function LiveSession() {
 
     fetchSession();
   }, [id]);
-
-  // 🔥 Dynamic Timer Based on expires_at
   useEffect(() => {
     if (!expiresAt) return;
 
@@ -76,7 +71,7 @@ const updateTimer = () => {
 
   setTimeLeft(remaining > 0 ? remaining : 0);
 };
-    updateTimer(); // Run immediately
+    updateTimer(); 
 
     const interval = setInterval(updateTimer, 1000);
 
@@ -89,7 +84,6 @@ const updateTimer = () => {
     return `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
   };
 
-  // 🔹 Fetch attendance
   const fetchAttendance = async () => {
     const { data } = await supabase
       .from("attendance")
@@ -131,7 +125,6 @@ const updateTimer = () => {
         Live Attendance Session
       </h1>
 
-      {/* 🔥 Dynamic Timer */}
       <div
         style={{
           fontSize: "42px",

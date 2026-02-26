@@ -5,7 +5,6 @@
   color: #e2e8f0;
 }
 
-/* Header */
 .header {
   position: relative;
   display: flex;
@@ -30,7 +29,6 @@
   color: #94a3b8;
 }
 
-/* Logout Button */
 .logoutBtn {
   margin-top: 15px;
   width: fit-content;
@@ -51,7 +49,6 @@
   box-shadow: 0 8px 25px rgba(220, 38, 38, 0.4);
 }
 
-/* Layout */
 .container {
   width: 90%;
   max-width: 1200px;
@@ -61,7 +58,6 @@
   gap: 24px;
 }
 
-/* Cards */
 .card {
   background: rgba(30, 41, 59, 0.85);
   backdrop-filter: blur(12px);
@@ -92,7 +88,6 @@
   font-weight: 600;
 }
 
-/* Inputs */
 .input {
   width: 100%;
   padding: 12px 14px;
@@ -115,7 +110,6 @@
   box-shadow: 0 0 0 3px rgba(56, 178, 172, 0.2);
 }
 
-/* Buttons */
 .btn {
   background: linear-gradient(135deg, #38b2ac, #2c9a93);
   color: white;
@@ -132,7 +126,6 @@
   box-shadow: 0 8px 25px rgba(56, 178, 172, 0.4);
 }
 
-/* Table */
 .table {
   width: 100%;
   border-collapse: collapse;
@@ -160,7 +153,6 @@
   background: rgba(56, 178, 172, 0.05);
 }
 
-/* Chips */
 .chip {
   padding: 5px 12px;
   border-radius: 20px;
@@ -174,7 +166,6 @@
   border: 1px solid rgba(248, 113, 113, 0.3);
 }
 
-/* Log Container */
 .logContainer {
   max-height: 180px;
   overflow-y: auto;
@@ -193,8 +184,6 @@
   color: #94a3b8;
   font-size: 12px;
 }
-
-/* QR */
 .qrContainer {
   margin-top: 20px;
   text-align: center;
@@ -207,13 +196,11 @@
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
 }
 
-/* Success */
 .successMsg {
   color: #22c55e;
   margin-top: 10px;
 }
 
-/* Loading */
 .loading {
   text-align: center;
   padding: 60px;

@@ -25,7 +25,6 @@ export default function StudentDashboard() {
         return;
       }
 
-      // 🔹 Validate student
       const { data: profile } = await supabase
         .from("profiles")
         .select("full_name, role")
@@ -42,7 +41,6 @@ export default function StudentDashboard() {
       
       
 
-      // 🔹 Get student subjects
       const { data: studentSubjects } = await supabase
         .from("student_classes")
         .select(`
@@ -72,7 +70,6 @@ export default function StudentDashboard() {
     percent: data.percent || 0,
   });
 }
-// 🔹 Get Attendance (Single API Call)
 const res = await fetch("/api/attendance", {
   method: "POST",
   headers: { "Content-Type": "application/json" },
@@ -99,12 +96,10 @@ setAttendancePercent(attendanceResult.overall || 0);
 // setAttendancePercent(avg);
 
 
-// 🔹 Get all sessions of student's subjects
 const { data: allSessions } = await supabase
   .from("sessions")
   .select("session_id, subject_id");
 
-// 🔹 Get student's attendance records
 const { data: attendanceData } = await supabase
   .from("attendance")
   .select(`
@@ -120,8 +115,6 @@ const { data: attendanceData } = await supabase
   .eq("student_id", user.id);
 
 
-
-      // 🔹 Recent Attendance (latest 5)
 const recent = attendanceData
   ?.sort(
     (a, b) =>
@@ -162,7 +155,6 @@ setRecentAttendance(recent);
     </p>
   </div>
 
-  {/* Desktop Logout */}
   <button
     className={styles.logoutBtn}
     onClick={handleLogout}
@@ -170,7 +162,6 @@ setRecentAttendance(recent);
     Logout
   </button>
 
-  {/* Mobile Menu Button */}
   <button
     className={styles.menuBtn}
     onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -179,7 +170,6 @@ setRecentAttendance(recent);
   </button>
 </header>
 
-{/* Overlay */}
 <div
   className={`${styles.overlay} ${
     sidebarOpen ? styles.overlayOpen : ""
@@ -187,7 +177,6 @@ setRecentAttendance(recent);
   onClick={() => setSidebarOpen(false)}
 />
 
-{/* Sidebar */}
 <div
   className={`${styles.sidebar} ${
     sidebarOpen ? styles.sidebarOpen : ""
@@ -206,7 +195,6 @@ setRecentAttendance(recent);
 
 
       <div className={styles.container}>
-        {/* 📊 Attendance Summary */}
         <div className={styles.card}>
           <h2 className={styles.cardTitle}>📊 Attendance Summary</h2>
 
@@ -227,7 +215,6 @@ setRecentAttendance(recent);
             </div>
           )}
 
-          {/* Subject-wise */}
           <div style={{ marginTop: "25px" }}>
             {subjectAttendance.map((sub, index) => (
               <div key={index} style={{ marginBottom: "15px" }}>
@@ -260,8 +247,6 @@ setRecentAttendance(recent);
             ))}
           </div>
         </div>
-
-        {/* 🎯 Mark Attendance */}
         <div className={styles.card}>
           <h2 className={styles.cardTitle}>🎯 Mark Attendance</h2>
           <button
@@ -273,8 +258,6 @@ setRecentAttendance(recent);
             Scan QR Code
           </button>
         </div>
-
-        {/* 🧾 Recent Attendance */}
         <div className={`${styles.card} ${styles.recentCard}`}>
           <h2 className={styles.cardTitle}>
             🧾 Recent Attendance

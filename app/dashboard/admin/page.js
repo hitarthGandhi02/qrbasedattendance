@@ -18,9 +18,6 @@ export default function AdminDashboard() {
 
   const [lectures, setLectures] = useState([]);
 
-  // =========================
-  // AUTH CHECK
-  // =========================
   useEffect(() => {
     const checkAdmin = async () => {
       const {
@@ -44,16 +41,11 @@ export default function AdminDashboard() {
       }
 
       setAdminName(profile.full_name);
-    //   fetchLectures();
       setLoading(false);
     };
 
     checkAdmin();
   }, []);
-
-  // =========================
-  // CREATE ACCOUNT
-  // =========================
   const handleCreateAccount = async () => {
     if (!email || !password || !fullName) {
       alert("All fields required");
@@ -83,9 +75,6 @@ export default function AdminDashboard() {
     setFullName("");
   };
 
-  // =========================
-  // FETCH ALL LECTURES
-  // =========================
   const fetchLectures = async () => {
     const { data } = await supabase
       .from("sessions")
@@ -101,9 +90,6 @@ export default function AdminDashboard() {
     setLectures(data || []);
   };
 
-  // =========================
-  // DELETE LECTURE
-  // =========================
   const deleteLecture = async (id) => {
     await supabase.from("sessions").delete().eq("session_id", id);
     fetchLectures();
@@ -118,7 +104,6 @@ export default function AdminDashboard() {
 
   return (
     <div className={styles.wrapper}>
-      {/* HEADER */}
       <header className={styles.header}>
         <div>
           <h1 className={styles.pageTitle}>Admin Dashboard</h1>
@@ -136,7 +121,6 @@ export default function AdminDashboard() {
       </header>
 
       <div className={styles.container}>
-        {/* CREATE ACCOUNT CARD */}
         <div className={styles.card}>
           <h2 className={styles.cardTitle}>
             👤 Create New Account
@@ -195,8 +179,6 @@ export default function AdminDashboard() {
             Create Account
           </button>
         </div>
-
-        {/* LECTURE MANAGEMENT */}
         <div className={`${styles.card} ${styles.fullWidth}`}>
           <h2 className={styles.cardTitle}>
             📚 Manage All Lectures

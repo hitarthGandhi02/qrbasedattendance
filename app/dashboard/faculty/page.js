@@ -21,9 +21,6 @@ export default function FacultyDashboard() {
     const [createdSessions, setCreatedSessions] = useState([]);
   const [auditData, setAuditData] = useState(null);
 
-  // -----------------------------
-  // AUTH CHECK
-  // -----------------------------
   useEffect(() => {
     const checkUser = async () => {
       const {
@@ -62,9 +59,6 @@ export default function FacultyDashboard() {
     checkUser();
   }, [router]);
 
-  // -----------------------------
-  // FETCH SUBJECTS
-  // -----------------------------
   useEffect(() => {
     const fetchSubjects = async () => {
       if (!selectedClass || !userId) return;
@@ -89,9 +83,6 @@ export default function FacultyDashboard() {
     fetchSubjects();
   }, [selectedClass, userId]);
 
-  // -----------------------------
-  // FETCH ONGOING SESSIONS
-  // -----------------------------
 
 const generateDefaulters = async () => {
   if (!defaulterClass) {
@@ -99,7 +90,6 @@ const generateDefaulters = async () => {
     return;
   }
 
-  // 1️⃣ Get students of class
   const { data: students } = await supabase
     .from("student_classes")
     .select(`
@@ -114,9 +104,7 @@ const generateDefaulters = async () => {
   }
 
   const defaultersList = [];
-  const addedStudents = new Set(); // ✅ Track unique student names
-
-  // 2️⃣ For each student calculate attendance
+  const addedStudents = new Set(); 
   for (const student of students) {
     const res = await fetch("/api/attendance", {
       method: "POST",
@@ -129,7 +117,6 @@ const generateDefaulters = async () => {
     const result = await res.json();
     const studentName = student.profiles?.full_name;
 
-    // ✅ Prevent duplicate names
     if (
       result.overall < 75 &&
       studentName &&
@@ -140,11 +127,10 @@ const generateDefaulters = async () => {
         result.overall + "%",
       ]);
 
-      addedStudents.add(studentName); // mark as added
+      addedStudents.add(studentName); 
     }
   }
 
-  // 3️⃣ Generate PDF
   const doc = new jsPDF();
 
   doc.setFillColor(17, 24, 39);
@@ -209,9 +195,6 @@ const generateDefaulters = async () => {
   }, [userId]);
 
 
-   // =============================
-  // FETCH ALL CREATED SESSIONS
-  // =============================
   useEffect(() => {
     if (!userId) return;
 
@@ -233,11 +216,7 @@ const generateDefaulters = async () => {
     fetchSessions();
   }, [userId]);
 
-  // =============================
-  // GENERATE AUDIT
-  // =============================
 const generateAudit = async (session) => {
-  // 1️⃣ Fetch students of class
   const { data: students } = await supabase
     .from("student_classes")
     .select(`
@@ -246,7 +225,6 @@ const generateAudit = async (session) => {
     `)
     .eq("class_id", session.class_id.class_id);
 
-  // 2️⃣ Fetch attendance of session
   const { data: attendance } = await supabase
     .from("attendance")
     .select("student_id")
@@ -255,9 +233,8 @@ const generateAudit = async (session) => {
   const presentIds = attendance?.map((a) => a.student_id) || [];
 
   const formattedStudents = [];
-  const addedStudents = new Set(); // ✅ Track unique student_ids
+  const addedStudents = new Set(); 
 
-  // 3️⃣ Format students (avoid duplicates)
   students?.forEach((s) => {
     if (!addedStudents.has(s.student_id)) {
       formattedStudents.push([
@@ -265,16 +242,12 @@ const generateAudit = async (session) => {
         presentIds.includes(s.student_id) ? "Present" : "Absent",
       ]);
 
-      addedStudents.add(s.student_id); // mark as added
+      addedStudents.add(s.student_id); 
     }
   });
 
-  // ==========================
-  // CREATE PDF
-  // ==========================
   const doc = new jsPDF();
-
-  // Dark background
+ 
   doc.setFillColor(17, 24, 39);
   doc.rect(0, 0, 210, 297, "F");
 
@@ -283,7 +256,6 @@ const generateAudit = async (session) => {
   doc.setFontSize(20);
   doc.text("AUDIT REPORT", 105, 20, { align: "center" });
 
-  // Session Info
   doc.setFontSize(12);
   doc.text(
     `Subject: ${session.subject_id.subject_name}`,
@@ -301,7 +273,6 @@ const generateAudit = async (session) => {
     56
   );
 
-  // Attendance Table
   autoTable(doc, {
     startY: 70,
     head: [["Student Name", "Status"]],
@@ -320,7 +291,6 @@ const generateAudit = async (session) => {
     },
   });
 
-  // Download
   doc.save(
     `Audit_${session.subject_id.subject_name}_${session.class_id.class_name}.pdf`
   );
@@ -328,9 +298,6 @@ const generateAudit = async (session) => {
 
 
 
-  // -----------------------------
-  // CREATE SESSION
-  // -----------------------------
   const generateQR = async () => {
     if (!selectedClass || !selectedSubject) {
       alert("Please select class and subject");
@@ -379,7 +346,6 @@ const generateAudit = async (session) => {
       </header>
 
       <div className={styles.container}>
-        {/* ONGOING SESSION CARD */}
         {ongoingSessions.length > 0 && (
           <div className={`${styles.card} ${styles.fullWidth}`}>
             <h2 className={styles.cardTitle}>🟢 Ongoing Sessions</h2>
@@ -448,8 +414,6 @@ const generateAudit = async (session) => {
     Generate List
   </button>
 </div>
-
-        {/* CREATE SESSION */}
         <div className={styles.card}>
           <h2 className={styles.cardTitle}>
             📲 Create New Lecture Session
@@ -486,7 +450,6 @@ const generateAudit = async (session) => {
           </button>
         </div>
 
-        {/* AUDIT LOGS */}
         <div className={`${styles.card} ${styles.fullWidth}`}>
           <h2 className={styles.cardTitle}>📜 Audit Logs</h2>
 
@@ -544,7 +507,6 @@ const generateAudit = async (session) => {
           )}
         </div>
 
-        {/* FACULTY ATTENDANCE */}
        
       </div>
     </div>

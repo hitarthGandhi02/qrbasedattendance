@@ -9,7 +9,6 @@ body {
   color: #e2e8f0;
 }
 
-/* Header */
 .header {
   position: relative;
   display: flex;
@@ -35,7 +34,6 @@ body {
   color: #94a3b8;
 }
 
-/* Grid Layout */
 .container {
   width: 90%;
   max-width: 1200px;
@@ -45,7 +43,6 @@ body {
   gap: 24px;
 }
 
-/* Cards */
 .card {
   background: rgba(30, 41, 59, 0.8);
   backdrop-filter: blur(12px);
@@ -71,7 +68,6 @@ body {
   color: #0070f3;
 }
 
-/* Progress Circle */
 .progressCircle {
   width: 160px;
   height: 160px;
@@ -98,8 +94,6 @@ body {
   font-weight: 600;
   color: #ffffff;
 }
-
-/* Warning */
 .warningBanner {
   background: rgba(220, 38, 38, 0.15);
   color: #f87171;
@@ -111,7 +105,6 @@ body {
   border: 1px solid rgba(248, 113, 113, 0.3);
 }
 
-/* Button */
 .btn {
   width: 100%;
   padding: 12px;
@@ -130,7 +123,6 @@ body {
   box-shadow: 0 8px 25px rgba(0, 112, 243, 0.4);
 }
 
-/* Schedule */
 .scheduleList {
   list-style: none;
   padding: 0;
@@ -142,12 +134,10 @@ body {
   color: #cbd5e1;
 }
 
-/* Recent Attendance Full Width */
 .recentCard {
   grid-column: span 2;
 }
 
-/* Table */
 .table {
   width: 100%;
   border-collapse: collapse;
@@ -175,7 +165,6 @@ body {
   background: rgba(0, 112, 243, 0.05);
 }
 
-/* Status Badges */
 .badge {
   padding: 5px 12px;
   border-radius: 20px;
@@ -195,7 +184,6 @@ body {
   border: 1px solid rgba(248, 113, 113, 0.3);
 }
 
-/* Logout */
 .logoutBtn {
   width: fit-content;
   position: absolute;
@@ -220,9 +208,6 @@ body {
   font-size: 18px;
   color: #94a3b8;
 }
-/* ============================= */
-/* 📋 Recent Attendance Table */
-/* ============================= */
 
 .recentCard {
   padding: 20px;
@@ -269,9 +254,6 @@ body {
   border-bottom: none;
 }
 
-/* ============================= */
-/* 🏷 Status Badges */
-/* ============================= */
 
 .badge {
   padding: 4px 10px;
@@ -300,8 +282,6 @@ body {
   min-height: 100vh;
   color: #e2e8f0;
 }
-
-/* Header */
 .header {
   position: relative;
   display: flex;
@@ -327,7 +307,6 @@ body {
   color: #94a3b8;
 }
 
-/* Grid Layout */
 .container {
   width: 90%;
   max-width: 1200px;
@@ -337,7 +316,6 @@ body {
   gap: 24px;
 }
 
-/* Cards */
 .card {
   background: rgba(30, 41, 59, 0.8);
   backdrop-filter: blur(12px);
@@ -363,7 +341,6 @@ body {
   color: #0070f3;
 }
 
-/* Progress Circle */
 .progressCircle {
   width: 160px;
   height: 160px;
@@ -391,7 +368,6 @@ body {
   color: #ffffff;
 }
 
-/* Warning */
 .warningBanner {
   background: rgba(220, 38, 38, 0.15);
   color: #f87171;
@@ -403,7 +379,6 @@ body {
   border: 1px solid rgba(248, 113, 113, 0.3);
 }
 
-/* Button */
 .btn {
   width: 100%;
   padding: 12px;
@@ -422,7 +397,6 @@ body {
   box-shadow: 0 8px 25px rgba(0, 112, 243, 0.4);
 }
 
-/* Schedule */
 .scheduleList {
   list-style: none;
   padding: 0;
@@ -434,7 +408,6 @@ body {
   color: #cbd5e1;
 }
 
-/* Recent Attendance Full Width */
 .recentCard {
   grid-column: span 2;
 }
@@ -467,7 +440,7 @@ body {
   background: rgba(0, 112, 243, 0.05);
 }
 
-/* Status Badges */
+
 .badge {
   padding: 5px 12px;
   border-radius: 20px;
@@ -487,7 +460,6 @@ body {
   border: 1px solid rgba(248, 113, 113, 0.3);
 }
 
-/* Logout */
 .logoutBtn {
   width: fit-content;
   position: absolute;
@@ -512,9 +484,6 @@ body {
   font-size: 18px;
   color: #94a3b8;
 }
-/* ============================= */
-/* 📋 Recent Attendance Table */
-/* ============================= */
 
 .recentCard {
   padding: 20px;
@@ -561,12 +530,6 @@ body {
   border-bottom: none;
 }
 
-/* ============================= */
-/* 🏷 Status Badges */
-/* ============================= */
-/* ============================= */
-/* 📱 Responsive Sidebar */
-/* ============================= */
 
 .menuBtn {
   display: none;
@@ -579,7 +542,6 @@ body {
   cursor: pointer;
 }
 
-/* Sidebar */
 .sidebar {
   position: fixed;
   top: 0;
@@ -592,7 +554,7 @@ body {
 
   display: flex;
   flex-direction: column;
-  align-items: center;   /* 👈 centers horizontally */
+  align-items: center;   
   justify-content: flex-start;
 
   transition: right 0.3s ease;
@@ -603,7 +565,6 @@ body {
   right: 0;
 }
 
-/* Overlay */
 .overlay {
   position: fixed;
   inset: 0;
@@ -620,19 +581,15 @@ body {
   pointer-events: all;
 }
 
-/* ============================= */
-/* 📱 Mobile Styles */
-/* ============================= */
 
 @media (max-width: 768px) {
 
-  /* Hide ONLY header logout */
   .header .logoutBtn {
     display: none;
   }
   .sidebar .logoutBtn {
   display: block;
-  width: 80%;            /* Not full width */
+  width: 80%;
   max-width: 200px;
   position: static;
   margin-top: 20px;
